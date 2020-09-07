@@ -72,7 +72,23 @@ public class App{
 
         table[3] = new String[] {"Max Value 2", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Long.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Long.toString(elapsedTimeMillis3)};
         
+        //Exercicio 4
+        start = System.currentTimeMillis(); 
+        Par<Integer,Long> resultMult = multiply(13, 12, 4);
+        nIteration1 = resultMult.getFirst();
+        elapsedTimeMillis1 = System.currentTimeMillis()-start;
 
+        start = System.currentTimeMillis(); 
+        resultMult = multiply(65513, 65481, 16);
+        nIteration2 = resultMult.getFirst();
+        elapsedTimeMillis2 = System.currentTimeMillis()-start;
+
+        start = System.currentTimeMillis(); 
+        resultMult = multiply((long) (Math.pow(2, 64)-67), (long) (Math.pow(2, 64)-92), 64);
+        nIteration3 = resultMult.getFirst();
+        elapsedTimeMillis3 = System.currentTimeMillis()-start;
+
+        table[4] = new String[] {"Multiply", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Long.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Long.toString(elapsedTimeMillis3)};
         
 
         for (final Object[] row : table) {
@@ -168,6 +184,29 @@ public class App{
             int nIteration = Math.max(v1.getFirst(),v2.getFirst())+1;
             int nMax       = Math.max(v1.getSecond(), v2.getSecond());
             return new Par<Integer,Integer>(nIteration, nMax);
+        }
+    }
+
+    public static Par<Integer,Long> multiply(long x, long y, long n){
+        if(n == 1){
+            return new Par<Integer, Long>(1, x*y);
+        }
+        else{
+            long m = n/2;
+            long a = x/((long)Math.pow(2, m));
+            long b = x%((long)Math.pow(2, m));
+            long c = y/((long)Math.pow(2, m));
+            long d = y%((long)Math.pow(2, m));
+            Par<Integer, Long> E = multiply(a, c, m);
+            Par<Integer, Long> F = multiply(b, d, m);
+            Par<Integer, Long> G = multiply(b, c, m);
+            Par<Integer, Long> H = multiply(a, d, m);
+
+            int nIteration = Math.max(E.getFirst(), F.getFirst());
+            nIteration = Math.max(nIteration, G.getFirst());
+            nIteration = Math.max(nIteration, H.getFirst());
+            long lResult = ((long) Math.pow(2, 2*m))*E.getSecond()+((long) Math.pow(2, m)*(G.getSecond()+H.getSecond()))+F.getSecond();
+            return new Par<Integer, Long>(nIteration+1, lResult);
         }
     }
 }
