@@ -111,35 +111,31 @@ public class App{
         Par<Integer,ArrayList<Integer>> B = mergeSort(lstB);
         lstA = A.getSecond();
         lstB = B.getSecond();
-        int nIteration = A.getFirst()+B.getFirst();
+        int nIteration = Math.max(A.getFirst(),B.getFirst())+1;
         int nIndexA = 0;
         int nIndexB = 0;
         while((nIndexA < lstA.size())&&(nIndexB < lstB.size())){
             if(lstA.get(nIndexA)< lstB.get(nIndexB)){
                 lstSorted.add(lstA.get(nIndexA)); 
                 nIndexA++;
-                nIteration++; 
             }
             else{
                 lstSorted.add(lstB.get(nIndexB));  
                 nIndexB++; 
-                nIteration++; 
             }
         }
         
         if(nIndexA < lstA.size()) {
             while (nIndexA < lstA.size()){
                 lstSorted.add(lstA.get(nIndexA)); 
-                nIndexA++; 
-                nIteration++;   
+                nIndexA++;  
             }
         }
 
         if(nIndexB < lstB.size()) {
             while (nIndexB < lstB.size()){
                 lstSorted.add(lstB.get(nIndexB)); 
-                nIndexB++;
-                nIteration++;     
+                nIndexB++;     
             }
         }        
 
@@ -169,9 +165,9 @@ public class App{
             Par<Integer,Integer> v1 = maxVal2(lstMax2, nStart, nMid);
             Par<Integer,Integer> v2 = maxVal2(lstMax2, nMid+1, nEnd);
 
-            int nIteration = v1.getFirst()+ v2.getFirst();
+            int nIteration = Math.max(v1.getFirst(),v2.getFirst())+1;
             int nMax       = Math.max(v1.getSecond(), v2.getSecond());
-            return new Par<Integer,Integer>(nIteration+1, nMax);
+            return new Par<Integer,Integer>(nIteration, nMax);
         }
     }
 }
