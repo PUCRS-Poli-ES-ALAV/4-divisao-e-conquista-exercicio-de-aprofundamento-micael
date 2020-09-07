@@ -54,7 +54,24 @@ public class App{
 
         table[2] = new String[] {"Max Value 1", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Long.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Long.toString(elapsedTimeMillis3)};
         
+        //Exercicio 3
+        start = System.currentTimeMillis(); 
+        Par<Integer,Integer> resultMaxVal2 = maxVal2(lstSize32, 0, lstSize32.size()-1);
+        nIteration1 = resultMaxVal2.getFirst();
+        elapsedTimeMillis1 = System.currentTimeMillis()-start;
 
+        start = System.currentTimeMillis(); 
+        resultMaxVal2 = maxVal2(lstSize2048, 0, lstSize2048.size()-1);
+        nIteration2 = resultMaxVal2.getFirst();
+        elapsedTimeMillis2 = System.currentTimeMillis()-start;
+
+        start = System.currentTimeMillis(); 
+        resultMaxVal2 = maxVal2(lstSize1048576, 0, lstSize1048576.size()-1);
+        nIteration3 = resultMaxVal2.getFirst();
+        elapsedTimeMillis3 = System.currentTimeMillis()-start;
+
+        table[3] = new String[] {"Max Value 2", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Long.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Long.toString(elapsedTimeMillis3)};
+        
 
         
 
@@ -94,7 +111,7 @@ public class App{
         Par<Integer,ArrayList<Integer>> B = mergeSort(lstB);
         lstA = A.getSecond();
         lstB = B.getSecond();
-        int nIteration = Math.max(A.getFirst(),B.getFirst());
+        int nIteration = A.getFirst()+B.getFirst();
         int nIndexA = 0;
         int nIndexB = 0;
         while((nIndexA < lstA.size())&&(nIndexB < lstB.size())){
@@ -121,7 +138,8 @@ public class App{
         if(nIndexB < lstB.size()) {
             while (nIndexB < lstB.size()){
                 lstSorted.add(lstB.get(nIndexB)); 
-                nIndexB++;    
+                nIndexB++;
+                nIteration++;     
             }
         }        
 
@@ -142,4 +160,18 @@ public class App{
         return new Par<Integer,Integer>(nIteration, max);
     }
 
+    public static Par<Integer,Integer> maxVal2(ArrayList<Integer> lstMax2, int nStart, int nEnd){
+        if((nEnd -nStart) <=1){
+            return new Par<Integer,Integer>(1, Math.max(lstMax2.get(nStart), lstMax2.get(nEnd)));
+        }
+        else{
+            int nMid = (nStart+nEnd)/2;
+            Par<Integer,Integer> v1 = maxVal2(lstMax2, nStart, nMid);
+            Par<Integer,Integer> v2 = maxVal2(lstMax2, nMid+1, nEnd);
+
+            int nIteration = v1.getFirst()+ v2.getFirst();
+            int nMax       = Math.max(v1.getSecond(), v2.getSecond());
+            return new Par<Integer,Integer>(nIteration+1, nMax);
+        }
+    }
 }
