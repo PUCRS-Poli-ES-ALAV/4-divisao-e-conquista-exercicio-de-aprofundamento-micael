@@ -5,12 +5,14 @@ import java.util.Random;
 public class App{
     public static void main(String[] args) {
         long start; 
-        long elapsedTimeMillis;
+        long elapsedTimeMillis1;
+        long elapsedTimeMillis2;
+        long elapsedTimeMillis3;
         ArrayList<Integer> lstSize32 = initialiseList(32);
         ArrayList<Integer> lstSize2048 = initialiseList(2048);
         ArrayList<Integer> lstSize1048576 = initialiseList(1048576);
         final Object[][] table = new String[5][];
-        table[0] = new String[] {"","Size 1: Iterations", "Size 1: Time (s)","Size 2: Iterations", "Size 2: Time (s)","Size 3: Iterations", "Size 3: Time (s)"};
+        table[0] = new String[] {"","Size 1: Iterations", "Size 1: Time (ms)","Size 2: Iterations", "Size 2: Time (ms)","Size 3: Iterations", "Size 3: Time (ms)"};
         //System.out.println("Lista pre-sort");
         //lstSize32.forEach((n) -> System.out.println(n));
 
@@ -18,27 +20,39 @@ public class App{
         start = System.currentTimeMillis(); 
         Par<Integer,ArrayList<Integer>> resultMergeSort = mergeSort(lstSize32);
         int nIteration1 = resultMergeSort.getFirst();
-        elapsedTimeMillis = System.currentTimeMillis()-start;
-        double elapsedTimeSec1 = elapsedTimeMillis/1000.0;
+        elapsedTimeMillis1 = System.currentTimeMillis()-start;
+
 
         start = System.currentTimeMillis(); 
         resultMergeSort = mergeSort(lstSize2048);
         int nIteration2 = resultMergeSort.getFirst();
-        elapsedTimeMillis = System.currentTimeMillis()-start;
-        double elapsedTimeSec2 = elapsedTimeMillis/1000.0;
+        elapsedTimeMillis2 = System.currentTimeMillis()-start;
 
         start = System.currentTimeMillis(); 
         resultMergeSort = mergeSort(lstSize1048576);
         int nIteration3 = resultMergeSort.getFirst();
-        elapsedTimeMillis = System.currentTimeMillis()-start;
-        double elapsedTimeSec3 = elapsedTimeMillis/1000.0;
+        elapsedTimeMillis3 = System.currentTimeMillis()-start;
 
-        table[1] = new String[] {"Merge Sort", Integer.toString(nIteration1), Double.toString(elapsedTimeSec1),Integer.toString(nIteration2), Double.toString(elapsedTimeSec2),Integer.toString(nIteration3), Double.toString(elapsedTimeSec3)};
+        table[1] = new String[] {"Merge Sort", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Double.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Double.toString(elapsedTimeMillis3)};
 
-        //ArrayList<Integer> lstSize32Sorted = resultMergeSort.getSecond(); 
-        //System.out.println("Lista pos-sort");
-        //lstSize32Sorted.forEach((n) -> System.out.println(n));
 
+        //Exercicio 2
+        start = System.currentTimeMillis(); 
+        Par<Integer,Integer> resultMaxVal1 = maxVal1(lstSize32);
+        nIteration1 = resultMaxVal1.getFirst();
+        elapsedTimeMillis1 = System.currentTimeMillis()-start;
+
+        start = System.currentTimeMillis(); 
+        resultMaxVal1 = maxVal1(lstSize2048);
+        nIteration2 = resultMaxVal1.getFirst();
+        elapsedTimeMillis2 = System.currentTimeMillis()-start;
+
+        start = System.currentTimeMillis(); 
+        resultMaxVal1 = maxVal1(lstSize1048576);
+        nIteration3 = resultMaxVal1.getFirst();
+        elapsedTimeMillis3 = System.currentTimeMillis()-start;
+
+        table[2] = new String[] {"Max Value 1", Integer.toString(nIteration1), Long.toString(elapsedTimeMillis1),Integer.toString(nIteration2), Long.toString(elapsedTimeMillis2),Integer.toString(nIteration3), Long.toString(elapsedTimeMillis3)};
         
 
 
@@ -86,18 +100,21 @@ public class App{
         while((nIndexA < lstA.size())&&(nIndexB < lstB.size())){
             if(lstA.get(nIndexA)< lstB.get(nIndexB)){
                 lstSorted.add(lstA.get(nIndexA)); 
-                nIndexA++; 
+                nIndexA++;
+                nIteration++; 
             }
             else{
                 lstSorted.add(lstB.get(nIndexB));  
-                nIndexB++;  
+                nIndexB++; 
+                nIteration++; 
             }
         }
         
         if(nIndexA < lstA.size()) {
             while (nIndexA < lstA.size()){
                 lstSorted.add(lstA.get(nIndexA)); 
-                nIndexA++;    
+                nIndexA++; 
+                nIteration++;   
             }
         }
 
@@ -108,6 +125,21 @@ public class App{
             }
         }        
 
-        return new Par<Integer,ArrayList<Integer>>(nIteration+1,lstSorted); 
+        return new Par<Integer,ArrayList<Integer>>(nIteration,lstSorted); 
     }
+
+    public static Par<Integer,Integer> maxVal1(ArrayList<Integer> lstMax1){
+        int max = lstMax1.get(0);
+        int nIteration = 0;
+
+        for(int i = 1; i < lstMax1.size(); i++){
+            if(lstMax1.get(i)> max){
+                max = lstMax1.get(i);
+            }
+            nIteration++;
+        }
+
+        return new Par<Integer,Integer>(nIteration, max);
+    }
+
 }
